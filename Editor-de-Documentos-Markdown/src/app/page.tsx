@@ -1,57 +1,72 @@
 // src/app/page.tsx
-'use client'; 
+'use client';
 
 import { useDocuments } from '../context/DocumentsContext';
-import { useRouter } from 'next/navigation'; // Hook do Next.js para navegação
+import { useRouter } from 'next/navigation';
+import { Header } from '../components/header'; 
+import { FileText, Plus, Trash2 } from 'lucide-react'; 
 
 export default function DocumentListPage() {
-  const { documents, createDocument, selectDocument } = useDocuments();
+  const { documents, createDocument, deleteDocument } = useDocuments(); // Adicione deleteDocument aqui
   const router = useRouter();
 
   const handleCreateNew = () => {
-    // 1. Cria o novo documento e obtém o ID
     const newId = createDocument();
-    
-    // 2. Redireciona para a página de edição (que vamos criar)
     router.push(`/doc/${newId}`);
   };
 
   const handleSelectDocument = (id: string) => {
-    selectDocument(id);
     router.push(`/doc/${id}`);
   };
   
   return (
-    <main className="p-8">
-      <h1 className="text-3xl font-bold mb-6">📝 Meus Documentos</h1>
-      
-      {/* Botão de criação */}
-      <button 
-        onClick={handleCreateNew}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-8"
-      >
-        + Criar Novo Documento
-      </button>
+    <div>
+      <Header /> {/* 💡 INTEGRAÇÃO DO HEADER */}
+      <main className="p-6 max-w-4xl mx-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold">📝 Meus Documentos</h1>
+          
+          <button 
+            onClick={handleCreateNew}
+            className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 shadow-md"
+          >
+            <Plus size={18} />
+            <span>Criar Novo Documento</span>
+          </button>
+        </div>
 
-      {/* Lista de Documentos */}
-      <div className="space-y-4">
-        {documents.length === 0 ? (
-          <p className="text-gray-500">Nenhum documento encontrado. Crie um novo para começar.</p>
-        ) : (
-          documents.map((doc) => (
-            <div 
-              key={doc.id} 
-              onClick={() => handleSelectDocument(doc.id)}
-              className="p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-100 transition duration-150"
-            >
-              <h2 className="text-xl font-semibold">{doc.title}</h2>
-              <p className="text-sm text-gray-500">
-                Última Atualização: {new Date(doc.updatedAt).toLocaleDateString()}
-              </p>
-            </div>
-          ))
-        )}
-      </div>
-    </main>
+        <div className="space-y-3">
+          {documents.length === 0 ? (
+            <p className="text-gray-500 dark:text-gray-400 mt-8">Nenhum documento encontrado. Crie um novo para começar.</p>
+          ) : (
+            documents.map((doc) => (
+              <div 
+                key={doc.id} 
+                className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-700 hover:shadow-lg transition duration-150"
+              >
+                <div 
+                  onClick={() => handleSelectDocument(doc.id)}
+                  className="flex-grow cursor-pointer"
+                >
+                  <h2 className="text-xl font-semibold">{doc.title}</h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Última Atualização: {new Date(doc.updatedAt).toLocaleDateString()}
+                  </p>
+                </div>
+                
+                {/* 💡 Botão de Exclusão Rápida (para ponto extra) */}
+                <button
+                  onClick={(e) => { e.stopPropagation(); deleteDocument(doc.id); }}
+                  className="p-2 rounded-full text-red-500 hover:bg-red-100 dark:hover:bg-red-900 transition-colors"
+                  title="Excluir Documento"
+                >
+                  <Trash2 size={20} />
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+      </main>
+    </div>
   );
 }
