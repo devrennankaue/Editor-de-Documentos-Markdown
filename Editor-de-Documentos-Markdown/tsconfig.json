@@ -1,3 +1,4 @@
+// tsconfig.json (Versão Corrigida para Estrutura 'src')
 {
   "compilerOptions": {
     "target": "ES2017",
@@ -18,8 +19,14 @@
         "name": "next"
       }
     ],
+    
+    // 💡 CORREÇÃO 1: Definir o diretório base para 'src'
+    "baseUrl": "./src", 
+    
+    // 💡 CORREÇÃO 2: Simplificar o mapeamento do alias. 
+    // Com baseUrl: "./src", o "@/*" mapeia para qualquer coisa dentro de "src"
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["*"] 
     }
   },
   "include": [

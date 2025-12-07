@@ -3,7 +3,7 @@
 
 import { useDocuments } from '../context/DocumentsContext';
 import { useRouter } from 'next/navigation';
-import { Header } from '../components/header'; 
+import  Header  from '../components/header'; 
 import { FileText, Plus, Trash2 } from 'lucide-react'; 
 
 export default function DocumentListPage() {

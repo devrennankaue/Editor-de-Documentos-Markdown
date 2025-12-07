@@ -6,12 +6,7 @@ import { IDocument, IUpdatePayload } from '../types/IDocument';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { v4 as uuidv4 } from 'uuid';
 
-// --- Instalação Adicional (Se ainda não o fez, pare e instale!)
-// npm install uuid
-// npm install --save-dev @types/uuid
-// ---
 
-// 1. Definição da Estrutura do Contexto
 interface IDocumentsContext {
   documents: IDocument[];
   selectedDocument: IDocument | null;

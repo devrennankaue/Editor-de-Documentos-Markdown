@@ -32,11 +32,18 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
-  // 💡 Efeito para aplicar a classe 'dark' ao <html> e sincronizar com o Tailwind
+  // 💡 CORREÇÃO APLICADA AQUI: Adicionar ou remover a classe 'dark'
   useEffect(() => {
     const root = window.document.documentElement;
-    root.classList.remove(theme === 'dark' ? 'light' : 'dark');
-    root.classList.add(theme);
+    
+    if (theme === 'dark') {
+      // Adiciona a classe 'dark' para ativar os estilos do Tailwind
+      root.classList.add('dark'); 
+    } else {
+      // Remove a classe 'dark' para desativar os estilos do Tailwind
+      root.classList.remove('dark'); 
+    }
+    
   }, [theme]);
 
   return (
