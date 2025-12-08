@@ -9,20 +9,27 @@ interface TitleEditorProps {
     initialTitle: string;
 }
 
-// Removendo React.FC para garantir compatibilidade
 export const TitleEditor = ({ documentId, initialTitle }: TitleEditorProps) => { 
     const [title, setTitle] = useState(initialTitle);
     const { updateDocument } = useDocuments();
     
     // Usa useCallback para salvar o título no Contexto
     const saveTitle = useCallback((newTitle: string) => {
-        if (newTitle.trim() === "") {
-            newTitle = "Documento Sem Título";
+        let finalTitle = newTitle.trim();
+        
+        // Validação: Garante título padrão se estiver vazio
+        if (finalTitle === "") {
+            finalTitle = "Documento Sem Título";
         }
-        updateDocument(documentId, { title: newTitle });
+        
+        updateDocument(documentId, { title: finalTitle });
+        
+        // Atualiza o estado local para refletir o título padrão se ele foi usado
+        setTitle(finalTitle); 
     }, [documentId, updateDocument]);
     
     useEffect(() => {
+        // Garante que o estado local é sincronizado quando o documento muda
         setTitle(initialTitle);
     }, [initialTitle]);
 
@@ -43,9 +50,10 @@ export const TitleEditor = ({ documentId, initialTitle }: TitleEditorProps) => {
             onChange={(e) => setTitle(e.target.value)}
             onBlur={handleBlur}
             onKeyPress={handleKeyPress}
-            // Estilização moderna e responsiva ao tema
-            className="w-full text-3xl font-bold bg-transparent border-none p-0 focus:outline-none 
-                       text-gray-900 dark:text-gray-100 placeholder-gray-400 mb-6"
+        
+            className="w-full text-2xl font-semibold bg-transparent border-b border-transparent 
+                         p-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 
+                         text-gray-900 dark:text-gray-100 placeholder-gray-400 transition-colors duration-200"
             placeholder="Documento Sem Título"
         />
     );

@@ -11,23 +11,20 @@ import { Trash2 } from 'lucide-react'; // Ícone
 
 export default function DocumentEditorPage() {
     const { id } = useParams<{ id: string }>();
-    // 💡 CORREÇÃO 1: Importar deleteDocument e garantir o título via selectedDocument
-    const { selectedDocument, selectDocument, deleteDocument } = useDocuments(); 
-    const router = useRouter(); 
+    const { selectedDocument, selectDocument, deleteDocument } = useDocuments();
+    const router = useRouter();
 
     useEffect(() => {
         if (!selectedDocument || selectedDocument.id !== id) {
             selectDocument(id);
         }
-    }, [id, selectedDocument, selectDocument]); 
+    }, [id, selectedDocument, selectDocument]);
 
     const handleDelete = () => {
-        // 💡 CORREÇÃO 2: Acessar o título do selectedDocument (se ele existir)
         const title = selectedDocument?.title || "este documento";
         
         if (confirm(`Tem certeza que deseja excluir o documento "${title}"?`)) {
-            // 💡 Ação: Chama a função de exclusão do contexto
-            deleteDocument(id); 
+            deleteDocument(id);
             router.push('/');
         }
     };
@@ -46,10 +43,10 @@ export default function DocumentEditorPage() {
     return (
         <div className="min-h-screen flex flex-col"> 
             <Header />
-            <main className="flex-grow flex flex-col p-4 md:p-8">
-                
-                {/* TÍTULO E BOTÃO DE EXCLUSÃO */}
-                <div className="flex justify-between items-center mb-6">
+            
+            <main className="flex-grow flex flex-col p-4 md:p-8 overflow-hidden">
+            
+                <div className="flex justify-between items-center mb-6 flex-shrink-0">
                     <div className="flex-grow">
                         <TitleEditor
                             documentId={selectedDocument.id}
@@ -57,25 +54,23 @@ export default function DocumentEditorPage() {
                         />
                     </div>
                     
-                    {/* BOTÃO DE EXCLUSÃO */}
                     <button
                         onClick={handleDelete}
-                        className="ml-4 p-2 rounded-lg bg-red-600 hover:bg-red-700 text-white transition duration-200 shadow-md"
+                        className="ml-4 p-2 rounded-lg bg-red-600 hover:bg-red-700 text-white transition duration-200 shadow-md flex-shrink-0"
                         title="Excluir Documento"
                     >
                         <Trash2 size={20} />
                     </button>
                 </div>
-                
-                {/* EDITOR E PREVIEW (Split-View) */}
-                <div className="flex-grow h-full">
+        
+                <div className="flex-grow overflow-hidden">
                     <DocumentEditor 
                         documentId={selectedDocument.id} 
                         initialContent={selectedDocument.content} 
                     />
                 </div>
                 
-                <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+                <p className="mt-4 text-sm text-gray-500 dark:text-gray-400 flex-shrink-0">
                     ID: {selectedDocument.id} | Última Atualização: {new Date(selectedDocument.updatedAt).toLocaleString()}
                 </p>
             </main>

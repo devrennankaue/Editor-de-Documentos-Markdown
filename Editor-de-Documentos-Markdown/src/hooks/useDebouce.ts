@@ -17,12 +17,10 @@ export function useDebounce<T>(value: T, delay: number): T {
       setDebouncedValue(value);
     }, delay);
 
-    // 2. Limpa o timer anterior se o valor (value) mudar antes do delay
-    // Isso é o que 'cancela' a chamada anterior e evita chamadas desnecessárias.
     return () => {
       clearTimeout(handler);
     };
-  }, [value, delay]); // Roda novamente quando 'value' ou 'delay' mudam
+  }, [value, delay]); 
 
   return debouncedValue;
 }

@@ -10,7 +10,6 @@ interface ProvidersProps {
 
 export default function Providers({ children }: ProvidersProps) {
   return (
-    // Coloque todos os seus provedores de contexto aqui
     <DocumentsProvider>
       {children}
     </DocumentsProvider>
