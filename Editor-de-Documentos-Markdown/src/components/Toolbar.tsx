@@ -11,7 +11,7 @@ const ToolbarButton: React.FC<{ icon: React.ReactNode, onClick: () => void, labe
     <button
         onClick={onClick}
         title={label}
-        className="p-1.5 rounded text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+        className="p-1.5 rounded text-gray-700 hover:bg-gray-200 transition-colors"
     >
         {icon}
     </button>
@@ -32,12 +32,12 @@ export const Toolbar: React.FC<ToolbarProps> = ({ insertMarkdown, className = ''
             <ToolbarButton icon={<Bold size={18} />} onClick={handleBold} label="Negrito (**bold**)" />
             <ToolbarButton icon={<Italic size={18} />} onClick={handleItalic} label="Itálico (*italic*)" />
 
-            <div className="w-px h-5 bg-gray-300 dark:bg-gray-600 mx-1"></div> 
+            <div className="w-px h-5 bg-gray-300 mx-1"></div> 
 
             <ToolbarButton icon={<Type size={18} />} onClick={handleHeading} label="Título (## Heading)" />
             <ToolbarButton icon={<List size={18} />} onClick={handleList} label="Lista Simples (- item)" />
 
-            <div className="w-px h-5 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+            <div className="w-px h-5 bg-gray-300 mx-1"></div>
 
             <ToolbarButton icon={<Link size={18} />} onClick={handleLink} label="Link ([text](url))" />
             <ToolbarButton icon={<Image size={18} />} onClick={handleImage} label="Imagem (![alt](url))" />

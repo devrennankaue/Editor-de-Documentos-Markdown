@@ -52,8 +52,8 @@ export const TitleEditor = ({ documentId, initialTitle }: TitleEditorProps) => {
             onKeyPress={handleKeyPress}
         
             className="w-full text-2xl font-semibold bg-transparent border-b border-transparent 
-                         p-1 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 
-                         text-gray-900 dark:text-gray-100 placeholder-gray-400 transition-colors duration-200"
+                         p-1 focus:outline-none focus:border-blue-500 
+                         text-gray-900 placeholder-gray-400 transition-colors duration-200"
             placeholder="Documento Sem Título"
         />
     );

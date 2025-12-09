@@ -3,9 +3,12 @@
 
 import React, { useState, useEffect, useCallback, useRef, ImgHTMLAttributes } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkBreaks from 'remark-breaks';
 import { useDocuments } from '@/context/DocumentsContext'; 
 import { Toolbar } from './Toolbar';
 import { useDebounce } from '../hooks/useDebouce';
+import { Box, Paper, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 interface DocumentEditorProps {
     documentId: string;
@@ -15,7 +18,7 @@ interface DocumentEditorProps {
 const SafeImage: React.FC<ImgHTMLAttributes<HTMLImageElement>> = ({ src, alt, ...props }) => {
     if (!src) {
       return (
-        <span className="text-red-500 dark:text-red-400">
+        <span className="text-red-500">
           [Erro de Imagem: URL ausente para "{alt}"]
         </span>
       );
@@ -86,48 +89,190 @@ const DocumentEditor = ({ documentId, initialContent }: DocumentEditorProps) => 
     }, []);
 
 
+    const theme = useTheme();
+
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 h-full border border-gray-300 dark:border-gray-600 rounded overflow-hidden shadow-lg">
-            
-            <div className='flex flex-col h-full bg-white dark:bg-gray-800'>
-                
-                <h2 className="text-sm font-medium p-3 bg-gray-100 dark:bg-gray-700 border-b border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 uppercase tracking-widest flex-shrink-0">
-                    Editor Markdown
-                </h2>
-                
-                <Toolbar 
-                    insertMarkdown={insertMarkdown} 
-                    className="bg-gray-50 dark:bg-gray-800 p-2 flex-shrink-0 border-b border-gray-200 dark:border-gray-700" 
-                /> 
-                
-                <textarea
-                    ref={textareaRef} 
-                    value={markdownInput} 
-                    onChange={handleChange} 
-                    placeholder="Comece a escrever em Markdown..."
-                    className="w-full p-4 resize-none flex-grow overflow-y-auto font-mono text-base
-                                 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-500 
-                                 focus:outline-none focus:ring-0 transition-colors border-0"
-                />
-            </div>
-
-            <div className="bg-gray-50 dark:bg-gray-900 h-full border-l border-gray-300 dark:border-gray-600">
-                
-                <h2 className="text-sm font-medium p-3 bg-gray-100 dark:bg-gray-700 border-b border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 uppercase tracking-widest flex-shrink-0">
-                    Preview
-                </h2>
-
-                <div className="overflow-y-auto h-full">
-                    <div className="prose max-w-none dark:prose-invert p-4"> 
-                        <ReactMarkdown 
-                            components={{ img: SafeImage }}
+        <Paper 
+            elevation={2}
+            sx={{
+                height: '100%',
+                display: 'flex',
+                overflow: 'hidden',
+                borderRadius: 2,
+            }}
+        >
+            <Box sx={{ display: 'flex', width: '100%', height: '100%' }}>
+                {/* Painel Esquerdo - Editor */}
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        width: '50%',
+                        height: '100%',
+                        borderRight: 1,
+                        borderColor: 'divider',
+                        backgroundColor: 'background.paper',
+                    }}
+                >
+                    <Box
+                        sx={{
+                            px: 2,
+                            py: 1.5,
+                            borderBottom: 1,
+                            borderColor: 'divider',
+                            backgroundColor: 'action.hover',
+                        }}
+                    >
+                        <Typography
+                            variant="overline"
+                            sx={{
+                                fontWeight: 600,
+                                fontSize: '0.75rem',
+                                textTransform: 'uppercase',
+                                letterSpacing: 1,
+                                color: 'text.secondary',
+                            }}
                         >
-                            {markdownInput}
-                        </ReactMarkdown>
-                    </div>
-                </div>
-            </div>
-        </div>
+                            Markdown
+                        </Typography>
+                    </Box>
+                    
+                    <Box
+                        sx={{
+                            borderBottom: 1,
+                            borderColor: 'divider',
+                            backgroundColor: 'action.hover',
+                        }}
+                    >
+                        <Toolbar 
+                            insertMarkdown={insertMarkdown} 
+                            className="px-3 py-2" 
+                        />
+                    </Box>
+                    
+                    <Box
+                        sx={{
+                            flex: 1,
+                            minHeight: 0,
+                            overflow: 'hidden',
+                            display: 'flex',
+                        }}
+                    >
+                        <textarea
+                            ref={textareaRef}
+                            value={markdownInput}
+                            onChange={handleChange}
+                            placeholder="Comece a escrever em Markdown..."
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                padding: '16px',
+                                resize: 'none',
+                                overflowY: 'auto',
+                                fontFamily: 'monospace',
+                                fontSize: '0.875rem',
+                                lineHeight: 1.6,
+                                backgroundColor: 'transparent',
+                                color: theme.palette.text.primary,
+                                border: 'none',
+                                outline: 'none',
+                            }}
+                            className="placeholder:text-gray-500"
+                        />
+                    </Box>
+                </Box>
+
+                {/* Painel Direito - Preview */}
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        width: '50%',
+                        height: '100%',
+                        backgroundColor: 'action.hover',
+                    }}
+                >
+                    <Box
+                        sx={{
+                            px: 2,
+                            py: 1.5,
+                            borderBottom: 1,
+                            borderColor: 'divider',
+                            backgroundColor: 'action.hover',
+                        }}
+                    >
+                        <Typography
+                            variant="overline"
+                            sx={{
+                                fontWeight: 600,
+                                fontSize: '0.75rem',
+                                textTransform: 'uppercase',
+                                letterSpacing: 1,
+                                color: 'text.secondary',
+                            }}
+                        >
+                            Preview
+                        </Typography>
+                    </Box>
+
+                    <Box
+                        sx={{
+                            flex: 1,
+                            minHeight: 0,
+                            overflowY: 'auto',
+                            p: 3,
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                '& .prose': {
+                                    maxWidth: 'none',
+                                },
+                                '& p': {
+                                    marginBottom: 1,
+                                },
+                                '& h1, & h2, & h3, & h4, & h5, & h6': {
+                                    marginTop: 2,
+                                    marginBottom: 1,
+                                    fontWeight: 600,
+                                },
+                                '& ul, & ol': {
+                                    paddingLeft: 3,
+                                    marginBottom: 1,
+                                },
+                                '& code': {
+                                    backgroundColor: 'action.hover',
+                                    padding: '2px 4px',
+                                    borderRadius: 1,
+                                    fontFamily: 'monospace',
+                                    fontSize: '0.875em',
+                                },
+                                '& pre': {
+                                    backgroundColor: 'action.hover',
+                                    padding: 2,
+                                    borderRadius: 1,
+                                    overflow: 'auto',
+                                },
+                                '& blockquote': {
+                                    borderLeft: 3,
+                                    borderColor: 'primary.main',
+                                    paddingLeft: 2,
+                                    marginLeft: 0,
+                                    fontStyle: 'italic',
+                                },
+                            }}
+                        >
+                            <ReactMarkdown 
+                                remarkPlugins={[remarkBreaks]}
+                                components={{ img: SafeImage }}
+                            >
+                                {markdownInput || '*Comece a escrever para ver a preview...*'}
+                            </ReactMarkdown>
+                        </Box>
+                    </Box>
+                </Box>
+            </Box>
+        </Paper>
     );
 };
 

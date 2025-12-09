@@ -33,7 +33,7 @@ export default function DocumentEditorPage() {
         return (
             <div className="min-h-screen flex flex-col">
                 <Header />
-                <div className="p-8 flex-grow text-gray-500 dark:text-gray-400 flex items-center justify-center">
+                <div className="p-8 flex-grow text-gray-500 flex items-center justify-center">
                     Carregando documento ou documento não encontrado...
                 </div>
             </div>
@@ -41,12 +41,12 @@ export default function DocumentEditorPage() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col"> 
+        <div className="fixed inset-0 flex flex-col overflow-hidden"> 
             <Header />
             
-            <main className="flex-grow flex flex-col p-4 md:p-8 overflow-hidden">
+            <main className="flex-1 flex flex-col min-h-0 overflow-hidden">
             
-                <div className="flex justify-between items-center mb-6 flex-shrink-0">
+                <div className="flex justify-between items-center px-4 py-3 border-b border-gray-200 bg-white flex-shrink-0">
                     <div className="flex-grow">
                         <TitleEditor
                             documentId={selectedDocument.id}
@@ -63,16 +63,12 @@ export default function DocumentEditorPage() {
                     </button>
                 </div>
         
-                <div className="flex-grow overflow-hidden">
+                <div className="flex-1 min-h-0 overflow-hidden p-4">
                     <DocumentEditor 
                         documentId={selectedDocument.id} 
                         initialContent={selectedDocument.content} 
                     />
                 </div>
-                
-                <p className="mt-4 text-sm text-gray-500 dark:text-gray-400 flex-shrink-0">
-                    ID: {selectedDocument.id} | Última Atualização: {new Date(selectedDocument.updatedAt).toLocaleString()}
-                </p>
             </main>
         </div>
     );
