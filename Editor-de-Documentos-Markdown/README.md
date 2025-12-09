@@ -2,61 +2,6 @@
 
 Editor de Documentos Markdown desenvolvido como parte do processo seletivo para a bolsa de desenvolvimento Frontend do Projeto ADA - Assembly Digital Assistant.
 
-## 🚀 Funcionalidades
-
-### Funcionalidades Obrigatórias ✅
-
-- **CRUD de Documentos**
-  - ✅ Criar documento novo
-  - ✅ Renomear documento
-  - ✅ Editar conteúdo
-  - ✅ Excluir documento
-  - ✅ Listar documentos existentes
-  - ✅ Armazenamento no localStorage
-
-- **Editor com Preview Markdown**
-  - ✅ Textarea para escrever conteúdo em Markdown
-  - ✅ Preview renderizado em tempo real com `react-markdown`
-  - ✅ Atualização automática conforme o usuário edita
-
-- **Toolbar de Estilização**
-  - ✅ Negrito (`**texto**`)
-  - ✅ Itálico (`*texto*`)
-  - ✅ Título (`## título`)
-  - ✅ Lista simples (`- item`)
-  - ✅ Link (`[texto](url)`)
-  - ✅ Imagem (`![alt](url)`)
-
-- **Context API**
-  - ✅ Gerenciamento de lista de documentos
-  - ✅ Documento selecionado
-  - ✅ Funções de criar, atualizar e excluir documentos
-
-- **Roteamento**
-  - ✅ `/` → Lista de documentos
-  - ✅ `/doc/:id` → Edição do documento selecionado
-
-### Funcionalidades Extras ⭐
-
-- ✅ **Autosave com debounce** - Salva automaticamente após 800ms de inatividade
-- ✅ **Tema claro/escuro** - Implementado com Material UI (MUI)
-- ✅ **Componentização avançada** - Componentes bem organizados e reutilizáveis
-- ✅ **Renomear documento diretamente na listagem** - Edição inline do título
-- ✅ **Organização de pastas bem planejada** - Estrutura clara e escalável
-- ✅ **Tipagem avançada com TypeScript** - Tipos bem definidos
-- ✅ **Layout dividido** - Editor e Preview lado a lado usando MUI
-
-## 🛠️ Tecnologias Utilizadas
-
-- **Framework**: Next.js 16.0.7 (App Router)
-- **Linguagem**: TypeScript
-- **UI Library**: Material UI (MUI) v7.3.6
-- **Estilização**: Tailwind CSS v4
-- **Markdown**: react-markdown + remark-breaks
-- **Ícones**: lucide-react
-- **Gerenciamento de Estado**: React Context API
-- **Hooks Customizados**: useLocalStorage, useDebounce
-
 ## 📋 Pré-requisitos
 
 Antes de começar, você precisa ter instalado:
@@ -144,6 +89,61 @@ Para verificar problemas no código:
 npm run lint
 ```
 
+## 🚀 Funcionalidades
+
+### Funcionalidades Obrigatórias ✅
+
+- **CRUD de Documentos**
+  - ✅ Criar documento novo
+  - ✅ Renomear documento
+  - ✅ Editar conteúdo
+  - ✅ Excluir documento
+  - ✅ Listar documentos existentes
+  - ✅ Armazenamento no localStorage
+
+- **Editor com Preview Markdown**
+  - ✅ Textarea para escrever conteúdo em Markdown
+  - ✅ Preview renderizado em tempo real com `react-markdown`
+  - ✅ Atualização automática conforme o usuário edita
+
+- **Toolbar de Estilização**
+  - ✅ Negrito (`**texto**`)
+  - ✅ Itálico (`*texto*`)
+  - ✅ Título (`## título`)
+  - ✅ Lista simples (`- item`)
+  - ✅ Link (`[texto](url)`)
+  - ✅ Imagem (`![alt](url)`)
+
+- **Context API**
+  - ✅ Gerenciamento de lista de documentos
+  - ✅ Documento selecionado
+  - ✅ Funções de criar, atualizar e excluir documentos
+
+- **Roteamento**
+  - ✅ `/` → Lista de documentos
+  - ✅ `/doc/:id` → Edição do documento selecionado
+
+### Funcionalidades Extras ⭐
+
+- ✅ **Autosave com debounce** - Salva automaticamente após 800ms de inatividade
+- ✅ **Tema claro/escuro** - Implementado com Material UI (MUI)
+- ✅ **Componentização avançada** - Componentes bem organizados e reutilizáveis
+- ✅ **Renomear documento diretamente na listagem** - Edição inline do título
+- ✅ **Organização de pastas bem planejada** - Estrutura clara e escalável
+- ✅ **Tipagem avançada com TypeScript** - Tipos bem definidos
+- ✅ **Layout dividido** - Editor e Preview lado a lado usando MUI
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Framework**: Next.js 16.0.7 (App Router)
+- **Linguagem**: TypeScript
+- **UI Library**: Material UI (MUI) v7.3.6
+- **Estilização**: Tailwind CSS v4
+- **Markdown**: react-markdown + remark-breaks
+- **Ícones**: lucide-react
+- **Gerenciamento de Estado**: React Context API
+- **Hooks Customizados**: useLocalStorage, useDebounce
+
 ## 📁 Estrutura do Projeto
 
 ```
@@ -227,4 +227,4 @@ Desenvolvido para o desafio do processo seletivo ADA - Assembly Digital Assistan
 
 ---
 
-**Desenvolvido com ❤️ usando Next.js, TypeScript e Material UI**
+**Desenvolvido usando Next.js, TypeScript e Material UI**
