@@ -221,6 +221,10 @@ O projeto utiliza **Material UI (MUI)** para gerenciamento de tema, oferecendo s
 
 Este projeto foi desenvolvido como parte do processo seletivo do Projeto ADA.
 
+## 👨‍💻 Autor
+
+Rennan Kauê de Oliveira Silva
+
 ---
 
 **Desenvolvido usando Next.js, TypeScript e Material UI**
