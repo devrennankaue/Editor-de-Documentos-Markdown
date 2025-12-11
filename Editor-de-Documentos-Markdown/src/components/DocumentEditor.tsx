@@ -50,13 +50,16 @@ const DocumentEditor = ({ documentId, initialContent, onSaveReady }: DocumentEdi
 
     const handleManualSave = useCallback(() => {
         const textarea = textareaRef.current;
-        const currentContent = textarea ? textarea.value : markdownInputRef.current;
         const currentDocId = documentIdRef.current;
         
-        if (textarea) {
-            setMarkdownInput(currentContent);
-            markdownInputRef.current = currentContent;
+        if (!textarea) {
+            return;
         }
+        
+        const currentContent = textarea.value || '';
+        
+        setMarkdownInput(currentContent);
+        markdownInputRef.current = currentContent;
         
         updateDocument(currentDocId, { content: currentContent });
     }, [updateDocument]);
@@ -80,14 +83,15 @@ const DocumentEditor = ({ documentId, initialContent, onSaveReady }: DocumentEdi
     useEffect(() => {
         if (documentIdRef.current !== documentId) {
             documentIdRef.current = documentId;
+            const newContent = initialContent || '';
+            setMarkdownInput(newContent);
+            markdownInputRef.current = newContent;
+            
+            if (textareaRef.current) {
+                textareaRef.current.value = newContent;
+            }
         }
-        setMarkdownInput(initialContent);
-        markdownInputRef.current = initialContent;
-        
-        if (textareaRef.current) {
-            textareaRef.current.value = initialContent;
-        }
-    }, [initialContent, documentId]);
+    }, [documentId, initialContent]);
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setMarkdownInput(e.target.value); 
