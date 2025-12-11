@@ -130,8 +130,30 @@ const Sidebar: React.FC<SidebarProps> = ({
             </Box>
 
             {/* Lista de Documentos */}
-            <Box sx={{ flex: 1, overflow: 'auto' }}>
-                <List sx={{ p: 1 }}>
+            <Box 
+                sx={{ 
+                    flex: 1, 
+                    overflowY: 'auto',
+                    overflowX: 'hidden',
+                    '&::-webkit-scrollbar': {
+                        width: '0px',
+                        background: 'transparent',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                        background: 'transparent',
+                    },
+                    scrollbarWidth: 'none',
+                    msOverflowStyle: 'none',
+                }}
+            >
+                <List 
+                    sx={{ 
+                        p: 1,
+                        '&::-webkit-scrollbar': {
+                            display: 'none',
+                        },
+                    }}
+                >
                     <ListItem disablePadding>
                         <ListItemButton
                             onClick={handleGoHome}
@@ -231,6 +253,11 @@ const Sidebar: React.FC<SidebarProps> = ({
                         boxSizing: 'border-box',
                         borderRight: 1,
                         borderColor: 'divider',
+                        '&::-webkit-scrollbar': {
+                            display: 'none',
+                        },
+                        scrollbarWidth: 'none',
+                        msOverflowStyle: 'none',
                     },
                 }}
             >
@@ -251,6 +278,11 @@ const Sidebar: React.FC<SidebarProps> = ({
                 '& .MuiDrawer-paper': {
                     width: drawerWidth,
                     boxSizing: 'border-box',
+                    '&::-webkit-scrollbar': {
+                        display: 'none',
+                    },
+                    scrollbarWidth: 'none',
+                    msOverflowStyle: 'none',
                 },
             }}
         >

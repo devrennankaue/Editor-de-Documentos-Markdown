@@ -13,6 +13,7 @@ import { useTheme } from '@mui/material/styles';
 interface DocumentEditorProps {
     documentId: string;
     initialContent: string;
+    onSaveReady?: (saveFn: () => void) => void;
 }
 
 const SafeImage: React.FC<ImgHTMLAttributes<HTMLImageElement>> = ({ src, alt, ...props }) => {
@@ -27,7 +28,7 @@ const SafeImage: React.FC<ImgHTMLAttributes<HTMLImageElement>> = ({ src, alt, ..
 };
 
 
-const DocumentEditor = ({ documentId, initialContent }: DocumentEditorProps) => { 
+const DocumentEditor = ({ documentId, initialContent, onSaveReady }: DocumentEditorProps) => { 
     const [markdownInput, setMarkdownInput] = useState(initialContent);
     const { updateDocument } = useDocuments();
     const textareaRef = useRef<HTMLTextAreaElement>(null); 
@@ -37,6 +38,18 @@ const DocumentEditor = ({ documentId, initialContent }: DocumentEditorProps) => 
     const saveContent = useCallback((newContent: string) => {
         updateDocument(documentId, { content: newContent });
     }, [documentId, updateDocument]);
+
+    // Função de salvar manual
+    const handleManualSave = useCallback(() => {
+        saveContent(markdownInput);
+    }, [markdownInput, saveContent]);
+
+    // Expõe a função de salvar para o componente pai
+    useEffect(() => {
+        if (onSaveReady) {
+            onSaveReady(handleManualSave);
+        }
+    }, [onSaveReady, handleManualSave]);
 
     useEffect(() => {
         if (debouncedContent !== initialContent) { 

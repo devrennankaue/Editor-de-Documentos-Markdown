@@ -12,7 +12,8 @@ import {
     useMediaQuery,
     useTheme,
 } from '@mui/material';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Save } from 'lucide-react';
+import { Button } from '@mui/material';
 import DocumentEditor from '../../../components/DocumentEditor';
 import Header from '../../../components/header';
 import { TitleEditor } from '../../../components/TitleEditor';
@@ -25,6 +26,7 @@ export default function DocumentEditorPage() {
     const { selectedDocument, selectDocument, deleteDocument } = useDocuments();
     const router = useRouter();
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [saveFunction, setSaveFunction] = useState<(() => void) | null>(null);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -40,6 +42,12 @@ export default function DocumentEditorPage() {
         if (window.confirm(`Tem certeza que deseja excluir o documento "${title}"?`)) {
             deleteDocument(id);
             router.push('/');
+        }
+    };
+
+    const handleSave = () => {
+        if (saveFunction) {
+            saveFunction();
         }
     };
 
@@ -112,26 +120,44 @@ export default function DocumentEditorPage() {
                             />
                         </Box>
                         
-                        <Tooltip title="Excluir Documento">
-                            <IconButton
-                                onClick={handleDelete}
-                                color="error"
-                                sx={{
-                                    '&:hover': {
-                                        backgroundColor: 'error.light',
-                                    },
-                                }}
-                            >
-                                <Trash2 size={20} />
-                            </IconButton>
-                        </Tooltip>
+                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                            <Tooltip title="Salvar Documento">
+                                <Button
+                                    variant="contained"
+                                    startIcon={<Save size={18} />}
+                                    onClick={handleSave}
+                                    size="small"
+                                    sx={{
+                                        textTransform: 'none',
+                                        borderRadius: 2,
+                                    }}
+                                >
+                                    Salvar
+                                </Button>
+                            </Tooltip>
+                            
+                            <Tooltip title="Excluir Documento">
+                                <IconButton
+                                    onClick={handleDelete}
+                                    color="error"
+                                    sx={{
+                                        '&:hover': {
+                                            backgroundColor: 'error.light',
+                                        },
+                                    }}
+                                >
+                                    <Trash2 size={20} />
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
                     </Paper>
             
                     {/* Editor */}
                     <Box sx={{ flex: 1, minHeight: 0, overflow: 'hidden', p: 2 }}>
                         <DocumentEditor 
                             documentId={selectedDocument.id} 
-                            initialContent={selectedDocument.content} 
+                            initialContent={selectedDocument.content}
+                            onSaveReady={setSaveFunction}
                         />
                     </Box>
                 </Box>
