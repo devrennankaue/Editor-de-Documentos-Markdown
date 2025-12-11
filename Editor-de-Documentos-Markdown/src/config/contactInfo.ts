@@ -1,6 +1,3 @@
-// src/config/contactInfo.ts
-// Dados de contato
-
 export const contactInfo = {
     name: 'Rennan Kauê de Oliveira Silva',
     github: 'https://github.com/devrennankaue',

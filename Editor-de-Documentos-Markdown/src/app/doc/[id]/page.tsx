@@ -1,7 +1,6 @@
-// src/app/doc/[id]/page.tsx
 'use client'; 
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDocuments } from '@/context/DocumentsContext';
 import { useParams, useRouter } from 'next/navigation';
 import {
@@ -9,11 +8,11 @@ import {
     IconButton,
     Tooltip,
     Paper,
+    Button,
     useMediaQuery,
     useTheme,
 } from '@mui/material';
 import { Trash2, Save } from 'lucide-react';
-import { Button } from '@mui/material';
 import DocumentEditor from '../../../components/DocumentEditor';
 import Header from '../../../components/header';
 import { TitleEditor } from '../../../components/TitleEditor';
@@ -26,9 +25,16 @@ export default function DocumentEditorPage() {
     const { selectedDocument, selectDocument, deleteDocument } = useDocuments();
     const router = useRouter();
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [saveFunction, setSaveFunction] = useState<(() => void) | null>(null);
+    const [mounted, setMounted] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+    const saveFunctionRef = useRef<(() => void) | null>(null);
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+    const matches = useMediaQuery(theme.breakpoints.down('md'));
+
+    useEffect(() => {
+        setMounted(true);
+        setIsMobile(matches);
+    }, [matches]);
 
     useEffect(() => {
         if (!selectedDocument || selectedDocument.id !== id) {
@@ -46,18 +52,22 @@ export default function DocumentEditorPage() {
     };
 
     const handleSave = () => {
-        if (saveFunction) {
-            saveFunction();
+        if (saveFunctionRef.current) {
+            saveFunctionRef.current();
         }
+    };
+
+    const handleSaveReady = (saveFn: () => void) => {
+        saveFunctionRef.current = saveFn;
     };
 
     if (!selectedDocument) {
         return (
             <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-                {!isMobile && (
+                {mounted && !isMobile && (
                     <Sidebar variant="permanent" open={true} onClose={() => {}} />
                 )}
-                {isMobile && (
+                {mounted && isMobile && (
                     <Sidebar 
                         variant="temporary" 
                         open={sidebarOpen} 
@@ -65,7 +75,7 @@ export default function DocumentEditorPage() {
                     />
                 )}
                 <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                    <Header onMenuClick={() => setSidebarOpen(true)} />
+                    <Header onMenuClick={() => mounted && setSidebarOpen(true)} />
                     <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <Box sx={{ color: 'text.secondary' }}>
                             Carregando documento ou documento não encontrado...
@@ -79,13 +89,11 @@ export default function DocumentEditorPage() {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <Box sx={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-                {/* Sidebar - Desktop */}
-                {!isMobile && (
+                {mounted && !isMobile && (
                     <Sidebar variant="permanent" open={true} onClose={() => {}} />
                 )}
 
-                {/* Sidebar - Mobile */}
-                {isMobile && (
+                {mounted && isMobile && (
                     <Sidebar 
                         variant="temporary" 
                         open={sidebarOpen} 
@@ -93,12 +101,10 @@ export default function DocumentEditorPage() {
                     />
                 )}
 
-                {/* Conteúdo Principal */}
                 <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                <Header onMenuClick={() => setSidebarOpen(true)} />
+                <Header onMenuClick={() => mounted && setSidebarOpen(true)} />
                 
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                    {/* Barra de Título */}
                     <Paper
                         elevation={0}
                         sx={{
@@ -152,12 +158,12 @@ export default function DocumentEditorPage() {
                         </Box>
                     </Paper>
             
-                    {/* Editor */}
                     <Box sx={{ flex: 1, minHeight: 0, overflow: 'hidden', p: 2 }}>
                         <DocumentEditor 
+                            key={selectedDocument.id}
                             documentId={selectedDocument.id} 
                             initialContent={selectedDocument.content}
-                            onSaveReady={setSaveFunction}
+                            onSaveReady={handleSaveReady}
                         />
                     </Box>
                 </Box>

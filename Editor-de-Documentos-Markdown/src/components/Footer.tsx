@@ -1,4 +1,3 @@
-// src/components/Footer.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -6,12 +5,10 @@ import {
     Box,
     Container,
     Typography,
-    Link,
     IconButton,
     Divider,
     Stack,
     Tooltip,
-    useTheme,
     Collapse,
     Fab,
 } from '@mui/material';
@@ -43,7 +40,6 @@ const Footer: React.FC<FooterProps> = ({
         location: '',
     }
 }) => {
-    const theme = useTheme();
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleFooter = () => {
@@ -52,7 +48,6 @@ const Footer: React.FC<FooterProps> = ({
 
     return (
         <>
-            {/* Botão Flutuante para Mostrar/Esconder Footer */}
             <Fab
                 color="primary"
                 aria-label="mostrar informações"
@@ -67,7 +62,6 @@ const Footer: React.FC<FooterProps> = ({
                 {isOpen ? <ChevronUp size={24} /> : <Info size={24} />}
             </Fab>
 
-            {/* Footer com Collapse */}
             <Collapse in={isOpen}>
                 <Box
                     component="footer"
@@ -86,7 +80,6 @@ const Footer: React.FC<FooterProps> = ({
                     justifyContent="space-between"
                     alignItems={{ xs: 'flex-start', sm: 'center' }}
                 >
-                    {/* Informações de Contato */}
                     <Box>
                         <Typography
                             variant="h6"
@@ -135,7 +128,6 @@ const Footer: React.FC<FooterProps> = ({
 
                     <Divider orientation="vertical" flexItem sx={{ display: { xs: 'none', sm: 'block' } }} />
 
-                    {/* Redes Sociais */}
                     <Box>
                         <Typography
                             variant="h6"
@@ -196,7 +188,6 @@ const Footer: React.FC<FooterProps> = ({
 
                 <Divider sx={{ my: 2 }} />
 
-                {/* Copyright */}
                 <Box
                     sx={{
                         display: 'flex',

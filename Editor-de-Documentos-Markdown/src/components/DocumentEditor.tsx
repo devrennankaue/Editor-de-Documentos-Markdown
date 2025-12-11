@@ -1,4 +1,3 @@
-// src/components/DocumentEditor.tsx
 'use client';
 
 import React, { useState, useEffect, useCallback, useRef, ImgHTMLAttributes } from 'react';
@@ -8,7 +7,6 @@ import { useDocuments } from '@/context/DocumentsContext';
 import { Toolbar } from './Toolbar';
 import { useDebounce } from '../hooks/useDebouce';
 import { Box, Paper, Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 
 interface DocumentEditorProps {
     documentId: string;
@@ -32,24 +30,46 @@ const DocumentEditor = ({ documentId, initialContent, onSaveReady }: DocumentEdi
     const [markdownInput, setMarkdownInput] = useState(initialContent);
     const { updateDocument } = useDocuments();
     const textareaRef = useRef<HTMLTextAreaElement>(null); 
+    const documentIdRef = useRef(documentId);
+    const markdownInputRef = useRef(markdownInput);
+    
+    useEffect(() => {
+        documentIdRef.current = documentId;
+    }, [documentId]);
+
+    useEffect(() => {
+        markdownInputRef.current = markdownInput;
+    }, [markdownInput]);
     
     const debouncedContent = useDebounce(markdownInput, 800); 
 
-    const saveContent = useCallback((newContent: string) => {
-        updateDocument(documentId, { content: newContent });
-    }, [documentId, updateDocument]);
+    const saveContent = useCallback((newContent: string, docId?: string) => {
+        const idToUse = docId || documentIdRef.current;
+        updateDocument(idToUse, { content: newContent });
+    }, [updateDocument]);
 
-    // Função de salvar manual
     const handleManualSave = useCallback(() => {
-        saveContent(markdownInput);
-    }, [markdownInput, saveContent]);
+        const textarea = textareaRef.current;
+        const currentContent = textarea ? textarea.value : markdownInputRef.current;
+        const currentDocId = documentIdRef.current;
+        
+        if (textarea) {
+            setMarkdownInput(currentContent);
+            markdownInputRef.current = currentContent;
+        }
+        
+        updateDocument(currentDocId, { content: currentContent });
+    }, [updateDocument]);
 
-    // Expõe a função de salvar para o componente pai
     useEffect(() => {
         if (onSaveReady) {
-            onSaveReady(handleManualSave);
+            requestAnimationFrame(() => {
+                if (onSaveReady) {
+                    onSaveReady(handleManualSave);
+                }
+            });
         }
-    }, [onSaveReady, handleManualSave]);
+    }, [onSaveReady, handleManualSave, documentId]);
 
     useEffect(() => {
         if (debouncedContent !== initialContent) { 
@@ -58,8 +78,16 @@ const DocumentEditor = ({ documentId, initialContent, onSaveReady }: DocumentEdi
     }, [debouncedContent, saveContent, initialContent]);
 
     useEffect(() => {
+        if (documentIdRef.current !== documentId) {
+            documentIdRef.current = documentId;
+        }
         setMarkdownInput(initialContent);
-    }, [initialContent]);
+        markdownInputRef.current = initialContent;
+        
+        if (textareaRef.current) {
+            textareaRef.current.value = initialContent;
+        }
+    }, [initialContent, documentId]);
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setMarkdownInput(e.target.value); 
@@ -102,8 +130,6 @@ const DocumentEditor = ({ documentId, initialContent, onSaveReady }: DocumentEdi
     }, []);
 
 
-    const theme = useTheme();
-
     return (
         <Paper 
             elevation={2}
@@ -115,7 +141,6 @@ const DocumentEditor = ({ documentId, initialContent, onSaveReady }: DocumentEdi
             }}
         >
             <Box sx={{ display: 'flex', width: '100%', height: '100%' }}>
-                {/* Painel Esquerdo - Editor */}
                 <Box
                     sx={{
                         display: 'flex',
@@ -196,7 +221,6 @@ const DocumentEditor = ({ documentId, initialContent, onSaveReady }: DocumentEdi
                     </Box>
                 </Box>
 
-                {/* Painel Direito - Preview */}
                 <Box
                     sx={{
                         display: 'flex',

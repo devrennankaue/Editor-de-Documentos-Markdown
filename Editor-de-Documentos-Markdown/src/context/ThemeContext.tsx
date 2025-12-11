@@ -16,7 +16,6 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>('light');
 
-  // Carrega o tema do localStorage no primeiro render do cliente
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('theme') as Theme | null;
@@ -42,27 +41,25 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     });
   };
 
-  // Cria o tema do MUI baseado no estado do tema com paleta moderna
   const muiTheme = React.useMemo(
     () =>
       createTheme({
         palette: {
           mode: theme,
           primary: {
-            main: '#2563eb', // Azul moderno
+            main: '#2563eb',
             light: '#3b82f6',
             dark: '#1d4ed8',
             contrastText: '#ffffff',
           },
           secondary: {
-            main: '#8b5cf6', // Roxo moderno
+            main: '#8b5cf6',
             light: '#a78bfa',
             dark: '#7c3aed',
             contrastText: '#ffffff',
           },
           ...(theme === 'light'
             ? {
-                // Tema claro
                 background: {
                   default: '#f8fafc',
                   paper: '#ffffff',
@@ -74,7 +71,6 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                 divider: '#e2e8f0',
               }
             : {
-                // Tema escuro
                 background: {
                   default: '#0f172a',
                   paper: '#1e293b',

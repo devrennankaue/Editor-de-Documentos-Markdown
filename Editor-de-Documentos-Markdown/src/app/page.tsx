@@ -1,4 +1,3 @@
-// src/app/page.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -31,12 +30,14 @@ export default function DocumentListPage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    setIsMobile(matches);
+  }, [matches]);
 
   const handleCreateNew = () => {
     const newId = createDocument();
@@ -57,13 +58,11 @@ export default function DocumentListPage() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Box sx={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-        {/* Sidebar - Desktop */}
-        {!isMobile && (
+        {mounted && !isMobile && (
           <Sidebar variant="permanent" open={true} onClose={() => {}} />
         )}
 
-        {/* Sidebar - Mobile */}
-        {isMobile && (
+        {mounted && isMobile && (
           <Sidebar 
             variant="temporary" 
             open={sidebarOpen} 
@@ -71,9 +70,8 @@ export default function DocumentListPage() {
           />
         )}
 
-        {/* Conteúdo Principal */}
         <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-          <Header onMenuClick={() => setSidebarOpen(true)} />
+          <Header onMenuClick={() => mounted && setSidebarOpen(true)} />
           
           <Box sx={{ flexGrow: 1, overflow: 'auto', backgroundColor: 'background.default' }}>
           <Container maxWidth="lg" sx={{ py: 4 }}>

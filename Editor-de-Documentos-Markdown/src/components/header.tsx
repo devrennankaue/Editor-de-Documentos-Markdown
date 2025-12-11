@@ -1,5 +1,3 @@
-// src/components/header.tsx
-
 'use client'; 
 import React from 'react'; 
 import { FileText, Moon, Sun, Menu } from 'lucide-react';

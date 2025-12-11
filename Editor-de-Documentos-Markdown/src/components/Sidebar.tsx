@@ -1,4 +1,3 @@
-// src/components/Sidebar.tsx
 'use client';
 
 import React from 'react';
@@ -18,7 +17,6 @@ import {
 import { 
     FileText, 
     Plus, 
-    Edit, 
     Trash2, 
     X,
     Home 
@@ -77,7 +75,6 @@ const Sidebar: React.FC<SidebarProps> = ({
 
     const drawerContent = (
         <Box sx={{ width: drawerWidth, height: '100%', display: 'flex', flexDirection: 'column' }}>
-            {/* Header do Drawer */}
             <Box
                 sx={{
                     p: 2,
@@ -102,7 +99,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                 )}
             </Box>
 
-            {/* Botão Criar Novo */}
             <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
                 <Tooltip title="Criar novo documento">
                     <ListItemButton
@@ -129,7 +125,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </Tooltip>
             </Box>
 
-            {/* Lista de Documentos */}
             <Box 
                 sx={{ 
                     flex: 1, 
@@ -272,7 +267,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             open={open}
             onClose={onClose}
             ModalProps={{
-                keepMounted: true, // Melhor performance em mobile
+                keepMounted: true,
             }}
             sx={{
                 '& .MuiDrawer-paper': {

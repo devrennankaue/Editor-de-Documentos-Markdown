@@ -1,4 +1,3 @@
-// src/components/Toolbar.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -85,7 +84,6 @@ export const Toolbar: React.FC<ToolbarProps> = ({ insertMarkdown }) => {
                 flexWrap: 'wrap',
             }}
         >
-            {/* Formatação de Texto */}
             <ToolbarButton 
                 icon={<Bold size={18} />} 
                 onClick={handleBold} 
@@ -109,7 +107,6 @@ export const Toolbar: React.FC<ToolbarProps> = ({ insertMarkdown }) => {
 
             <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
 
-            {/* Títulos */}
             <FormControl size="small" sx={{ minWidth: 100, mr: 0.5 }}>
                 <InputLabel id="heading-select-label">Título</InputLabel>
                 <Select
@@ -161,7 +158,6 @@ export const Toolbar: React.FC<ToolbarProps> = ({ insertMarkdown }) => {
 
             <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
 
-            {/* Lista */}
             <ToolbarButton 
                 icon={<List size={18} />} 
                 onClick={handleList} 
@@ -170,7 +166,6 @@ export const Toolbar: React.FC<ToolbarProps> = ({ insertMarkdown }) => {
 
             <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
 
-            {/* Links e Imagens */}
             <ToolbarButton 
                 icon={<Link size={18} />} 
                 onClick={handleLink} 

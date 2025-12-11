@@ -1,5 +1,3 @@
-// src/app/layout.tsx
-
 import { DocumentsProvider } from '@/context/DocumentsContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 
