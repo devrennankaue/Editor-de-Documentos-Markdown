@@ -42,35 +42,83 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     });
   };
 
-  // Cria o tema do MUI baseado no estado do tema
+  // Cria o tema do MUI baseado no estado do tema com paleta moderna
   const muiTheme = React.useMemo(
     () =>
       createTheme({
         palette: {
           mode: theme,
+          primary: {
+            main: '#2563eb', // Azul moderno
+            light: '#3b82f6',
+            dark: '#1d4ed8',
+            contrastText: '#ffffff',
+          },
+          secondary: {
+            main: '#8b5cf6', // Roxo moderno
+            light: '#a78bfa',
+            dark: '#7c3aed',
+            contrastText: '#ffffff',
+          },
           ...(theme === 'light'
             ? {
                 // Tema claro
                 background: {
-                  default: '#f9fafb',
+                  default: '#f8fafc',
                   paper: '#ffffff',
                 },
                 text: {
-                  primary: '#111827',
-                  secondary: '#6b7280',
+                  primary: '#0f172a',
+                  secondary: '#64748b',
                 },
+                divider: '#e2e8f0',
               }
             : {
                 // Tema escuro
                 background: {
-                  default: '#111827',
-                  paper: '#1f2937',
+                  default: '#0f172a',
+                  paper: '#1e293b',
                 },
                 text: {
-                  primary: '#f9fafb',
-                  secondary: '#d1d5db',
+                  primary: '#f1f5f9',
+                  secondary: '#cbd5e1',
                 },
+                divider: '#334155',
               }),
+        },
+        typography: {
+          fontFamily: [
+            '-apple-system',
+            'BlinkMacSystemFont',
+            '"Segoe UI"',
+            'Roboto',
+            '"Helvetica Neue"',
+            'Arial',
+            'sans-serif',
+          ].join(','),
+          h6: {
+            fontWeight: 600,
+          },
+        },
+        shape: {
+          borderRadius: 8,
+        },
+        components: {
+          MuiPaper: {
+            styleOverrides: {
+              root: {
+                backgroundImage: 'none',
+              },
+            },
+          },
+          MuiButton: {
+            styleOverrides: {
+              root: {
+                textTransform: 'none',
+                fontWeight: 500,
+              },
+            },
+          },
         },
       }),
     [theme]

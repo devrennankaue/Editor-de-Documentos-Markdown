@@ -1,18 +1,32 @@
 // src/app/doc/[id]/page.tsx
 'use client'; 
 
+import { useEffect, useState } from 'react';
 import { useDocuments } from '@/context/DocumentsContext';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import DocumentEditor from '../../../components/DocumentEditor'; // Caminho relativo
-import  Header  from '../../../components/header'; // Caminho relativo
-import { TitleEditor } from '../../../components/TitleEditor'; // Caminho relativo
-import { Trash2 } from 'lucide-react'; // Ícone
+import {
+    Box,
+    IconButton,
+    Tooltip,
+    Paper,
+    useMediaQuery,
+    useTheme,
+} from '@mui/material';
+import { Trash2 } from 'lucide-react';
+import DocumentEditor from '../../../components/DocumentEditor';
+import Header from '../../../components/header';
+import { TitleEditor } from '../../../components/TitleEditor';
+import Sidebar from '../../../components/Sidebar';
+import Footer from '../../../components/Footer';
+import { contactInfo } from '../../../config/contactInfo';
 
 export default function DocumentEditorPage() {
     const { id } = useParams<{ id: string }>();
     const { selectedDocument, selectDocument, deleteDocument } = useDocuments();
     const router = useRouter();
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
     useEffect(() => {
         if (!selectedDocument || selectedDocument.id !== id) {
@@ -23,7 +37,7 @@ export default function DocumentEditorPage() {
     const handleDelete = () => {
         const title = selectedDocument?.title || "este documento";
         
-        if (confirm(`Tem certeza que deseja excluir o documento "${title}"?`)) {
+        if (window.confirm(`Tem certeza que deseja excluir o documento "${title}"?`)) {
             deleteDocument(id);
             router.push('/');
         }
@@ -31,45 +45,100 @@ export default function DocumentEditorPage() {
 
     if (!selectedDocument) {
         return (
-            <div className="min-h-screen flex flex-col">
-                <Header />
-                <div className="p-8 flex-grow text-gray-500 flex items-center justify-center">
-                    Carregando documento ou documento não encontrado...
-                </div>
-            </div>
+            <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+                {!isMobile && (
+                    <Sidebar variant="permanent" open={true} onClose={() => {}} />
+                )}
+                {isMobile && (
+                    <Sidebar 
+                        variant="temporary" 
+                        open={sidebarOpen} 
+                        onClose={() => setSidebarOpen(false)} 
+                    />
+                )}
+                <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                    <Header onMenuClick={() => setSidebarOpen(true)} />
+                    <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Box sx={{ color: 'text.secondary' }}>
+                            Carregando documento ou documento não encontrado...
+                        </Box>
+                    </Box>
+                </Box>
+            </Box>
         );
     }
 
     return (
-        <div className="fixed inset-0 flex flex-col overflow-hidden"> 
-            <Header />
-            
-            <main className="flex-1 flex flex-col min-h-0 overflow-hidden">
-            
-                <div className="flex justify-between items-center px-4 py-3 border-b border-gray-200 bg-white flex-shrink-0">
-                    <div className="flex-grow">
-                        <TitleEditor
-                            documentId={selectedDocument.id}
-                            initialTitle={selectedDocument.title}
-                        />
-                    </div>
-                    
-                    <button
-                        onClick={handleDelete}
-                        className="ml-4 p-2 rounded-lg bg-red-600 hover:bg-red-700 text-white transition duration-200 shadow-md flex-shrink-0"
-                        title="Excluir Documento"
-                    >
-                        <Trash2 size={20} />
-                    </button>
-                </div>
-        
-                <div className="flex-1 min-h-0 overflow-hidden p-4">
-                    <DocumentEditor 
-                        documentId={selectedDocument.id} 
-                        initialContent={selectedDocument.content} 
+        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+            <Box sx={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+                {/* Sidebar - Desktop */}
+                {!isMobile && (
+                    <Sidebar variant="permanent" open={true} onClose={() => {}} />
+                )}
+
+                {/* Sidebar - Mobile */}
+                {isMobile && (
+                    <Sidebar 
+                        variant="temporary" 
+                        open={sidebarOpen} 
+                        onClose={() => setSidebarOpen(false)} 
                     />
-                </div>
-            </main>
-        </div>
+                )}
+
+                {/* Conteúdo Principal */}
+                <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                <Header onMenuClick={() => setSidebarOpen(true)} />
+                
+                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                    {/* Barra de Título */}
+                    <Paper
+                        elevation={0}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            px: 3,
+                            py: 2,
+                            borderBottom: 1,
+                            borderColor: 'divider',
+                            backgroundColor: 'background.paper',
+                            flexShrink: 0,
+                        }}
+                    >
+                        <Box sx={{ flexGrow: 1, mr: 2 }}>
+                            <TitleEditor
+                                documentId={selectedDocument.id}
+                                initialTitle={selectedDocument.title}
+                            />
+                        </Box>
+                        
+                        <Tooltip title="Excluir Documento">
+                            <IconButton
+                                onClick={handleDelete}
+                                color="error"
+                                sx={{
+                                    '&:hover': {
+                                        backgroundColor: 'error.light',
+                                    },
+                                }}
+                            >
+                                <Trash2 size={20} />
+                            </IconButton>
+                        </Tooltip>
+                    </Paper>
+            
+                    {/* Editor */}
+                    <Box sx={{ flex: 1, minHeight: 0, overflow: 'hidden', p: 2 }}>
+                        <DocumentEditor 
+                            documentId={selectedDocument.id} 
+                            initialContent={selectedDocument.content} 
+                        />
+                    </Box>
+                </Box>
+            </Box>
+            </Box>
+            
+            <Footer contactInfo={contactInfo} />
+        </Box>
     );
 }

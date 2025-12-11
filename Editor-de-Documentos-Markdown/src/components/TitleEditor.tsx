@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { TextField } from '@mui/material';
 import { useDocuments } from '@/context/DocumentsContext'; 
 
 interface TitleEditorProps {
@@ -44,17 +45,30 @@ export const TitleEditor = ({ documentId, initialTitle }: TitleEditorProps) => {
     };
 
     return (
-        <input
-            type="text"
+        <TextField
+            fullWidth
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onBlur={handleBlur}
             onKeyPress={handleKeyPress}
-        
-            className="w-full text-2xl font-semibold bg-transparent border-b border-transparent 
-                         p-1 focus:outline-none focus:border-blue-500 
-                         text-gray-900 placeholder-gray-400 transition-colors duration-200"
             placeholder="Documento Sem Título"
+            variant="standard"
+            sx={{
+                '& .MuiInputBase-input': {
+                    fontSize: '1.5rem',
+                    fontWeight: 600,
+                    py: 1,
+                },
+                '& .MuiInput-underline:before': {
+                    borderBottomColor: 'divider',
+                },
+                '& .MuiInput-underline:hover:before': {
+                    borderBottomColor: 'primary.main',
+                },
+                '& .MuiInput-underline:after': {
+                    borderBottomColor: 'primary.main',
+                },
+            }}
         />
     );
 };

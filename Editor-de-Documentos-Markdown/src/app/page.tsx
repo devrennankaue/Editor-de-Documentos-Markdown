@@ -1,16 +1,38 @@
 // src/app/page.tsx
 'use client';
 
+import React, { useState, useEffect } from 'react';
 import { useDocuments } from '../context/DocumentsContext';
 import { useRouter } from 'next/navigation';
-import Header from '../components/header'; 
-import { Plus, Trash2, Edit } from 'lucide-react'; 
-import { useState, useEffect } from 'react';
+import {
+    Box,
+    Container,
+    Typography,
+    Button,
+    Paper,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemButton,
+    IconButton,
+    Tooltip,
+    Divider,
+    useMediaQuery,
+    useTheme,
+} from '@mui/material';
+import { Plus, Edit, Trash2 } from 'lucide-react';
+import Header from '../components/header';
+import Sidebar from '../components/Sidebar';
+import Footer from '../components/Footer';
+import { contactInfo } from '../config/contactInfo';
 
 export default function DocumentListPage() {
   const { documents, createDocument, deleteDocument } = useDocuments();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
     setMounted(true);
@@ -24,91 +46,147 @@ export default function DocumentListPage() {
   const handleSelectDocument = (id: string) => {
     router.push(`/doc/${id}`);
   };
+
+  const handleDelete = (e: React.MouseEvent, id: string, title: string) => {
+    e.stopPropagation();
+    if (window.confirm(`Tem certeza que deseja excluir o documento "${title}"?`)) {
+      deleteDocument(id);
+    }
+  };
   
   return (
-    <div>
-      <Header />
-      <main className="p-6 max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-10 mt-4">
-          <h1 className="text-3xl font-extrabold text-gray-900">
-            Meus Documentos
-          </h1>
-          
-          <button 
-            onClick={handleCreateNew}
-            className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full shadow-lg transition duration-300 transform hover:scale-[1.02]"
-          >
-            <Plus size={18} />
-            <span>Criar Novo Documento</span>
-          </button>
-        </div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <Box sx={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+        {/* Sidebar - Desktop */}
+        {!isMobile && (
+          <Sidebar variant="permanent" open={true} onClose={() => {}} />
+        )}
 
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm mx-8 sm:mx-12 md:mx-16">
-          {!mounted ? (
-            <p className="text-gray-500 mt-8 text-center p-8 border border-dashed border-gray-300 rounded-lg">
-              Carregando...
-            </p>
-          ) : documents.length === 0 ? (
-            <p className="text-gray-500 mt-8 text-center p-8 border border-dashed border-gray-300 rounded-lg">
-              Nenhum documento encontrado. Clique em "Criar Novo Documento" para começar!
-            </p>
-          ) : (
-            documents.map((doc, index) => (
-              <div key={doc.id}>
-                <div 
-                  className="flex items-center justify-between px-5 py-4 hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex-grow min-w-0">
-                    <h2 className="text-base font-semibold truncate text-gray-900 mb-0.5">
-                      {doc.title}
-                    </h2>
-                    <p className="text-sm text-gray-500 truncate">
-                      Última Atualização: {new Date(doc.updatedAt).toLocaleDateString('pt-BR', { 
-                        day: '2-digit', 
-                        month: '2-digit', 
-                        year: 'numeric' 
-                      })}
-                    </p>
-                  </div>
-                  
-                  <div 
-                    className="flex items-center gap-3 ml-4"
-                    onClick={(e) => e.stopPropagation()}
+        {/* Sidebar - Mobile */}
+        {isMobile && (
+          <Sidebar 
+            variant="temporary" 
+            open={sidebarOpen} 
+            onClose={() => setSidebarOpen(false)} 
+          />
+        )}
+
+        {/* Conteúdo Principal */}
+        <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          <Header onMenuClick={() => setSidebarOpen(true)} />
+          
+          <Box sx={{ flexGrow: 1, overflow: 'auto', backgroundColor: 'background.default' }}>
+          <Container maxWidth="lg" sx={{ py: 4 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+              <Typography variant="h4" component="h1" sx={{ fontWeight: 600, color: 'text.primary' }}>
+                Meus Documentos
+              </Typography>
+              
+              <Button
+                variant="contained"
+                startIcon={<Plus size={20} />}
+                onClick={handleCreateNew}
+                sx={{
+                  borderRadius: 3,
+                  textTransform: 'none',
+                  fontWeight: 500,
+                  px: 3,
+                }}
+              >
+                Criar Novo Documento
+              </Button>
+            </Box>
+
+            <Paper elevation={2} sx={{ borderRadius: 2, overflow: 'hidden' }}>
+              {!mounted ? (
+                <Box sx={{ p: 4, textAlign: 'center' }}>
+                  <Typography color="text.secondary">Carregando...</Typography>
+                </Box>
+              ) : documents.length === 0 ? (
+                <Box sx={{ p: 6, textAlign: 'center' }}>
+                  <Typography color="text.secondary" sx={{ mb: 2 }}>
+                    Nenhum documento encontrado.
+                  </Typography>
+                  <Button
+                    variant="outlined"
+                    startIcon={<Plus size={20} />}
+                    onClick={handleCreateNew}
+                    sx={{ textTransform: 'none' }}
                   >
-                    <button
-                      onClick={(e) => { 
-                        e.stopPropagation(); 
-                        handleSelectDocument(doc.id);
-                      }}
-                      className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex-shrink-0 text-sm font-medium"
-                      title={`Editar Documento "${doc.title}"`}
-                    >
-                      <Edit size={16} />
-                      <span>Editar Documento</span>
-                    </button>
-                    
-                    <button
-                      onClick={(e) => { 
-                        e.stopPropagation(); 
-                        if(window.confirm(`Tem certeza que deseja excluir o documento "${doc.title}"?`)) {
-                          deleteDocument(doc.id);
+                    Criar Novo Documento
+                  </Button>
+                </Box>
+              ) : (
+                <List sx={{ p: 0 }}>
+                  {documents.map((doc, index) => (
+                    <React.Fragment key={doc.id}>
+                      <ListItem
+                        disablePadding
+                        secondaryAction={
+                          <Box sx={{ display: 'flex', gap: 1, mr: 2 }}>
+                            <Tooltip title={`Editar "${doc.title}"`}>
+                              <IconButton
+                                edge="end"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleSelectDocument(doc.id);
+                                }}
+                                sx={{ color: 'primary.main' }}
+                              >
+                                <Edit size={18} />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title={`Excluir "${doc.title}"`}>
+                              <IconButton
+                                edge="end"
+                                onClick={(e) => handleDelete(e, doc.id, doc.title)}
+                                sx={{ color: 'error.main' }}
+                              >
+                                <Trash2 size={18} />
+                              </IconButton>
+                            </Tooltip>
+                          </Box>
                         }
-                      }}
-                      className="p-2 rounded-lg text-red-600 hover:bg-red-100 transition-colors flex-shrink-0"
-                      title={`Excluir Documento "${doc.title}"`}
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
-                </div>
-                {index < documents.length - 1 && (
-                  <div className="border-b border-gray-200 mx-5"></div>
-                )}
-              </div>
-            ))
-          )}
-        </div>
-      </main>
-    </div>
+                      >
+                        <ListItemButton
+                          onClick={() => handleSelectDocument(doc.id)}
+                          sx={{
+                            py: 2,
+                            px: 3,
+                            '&:hover': {
+                              backgroundColor: 'action.hover',
+                            },
+                          }}
+                        >
+                          <ListItemText
+                            primary={doc.title}
+                            secondary={`Última Atualização: ${new Date(doc.updatedAt).toLocaleDateString('pt-BR', {
+                              day: '2-digit',
+                              month: '2-digit',
+                              year: 'numeric',
+                            })}`}
+                            primaryTypographyProps={{
+                              fontWeight: 500,
+                              noWrap: true,
+                            }}
+                            secondaryTypographyProps={{
+                              variant: 'caption',
+                            }}
+                          />
+                        </ListItemButton>
+                      </ListItem>
+                      {index < documents.length - 1 && <Divider />}
+                    </React.Fragment>
+                  ))}
+                </List>
+              )}
+            </Paper>
+          </Container>
+          </Box>
+        </Box>
+      </Box>
+      
+      <Footer contactInfo={contactInfo} />
+    </Box>
   );
 }

@@ -18,12 +18,12 @@ interface DocumentEditorProps {
 const SafeImage: React.FC<ImgHTMLAttributes<HTMLImageElement>> = ({ src, alt, ...props }) => {
     if (!src) {
       return (
-        <span className="text-red-500">
+        <Typography component="span" sx={{ color: 'error.main' }}>
           [Erro de Imagem: URL ausente para "{alt}"]
-        </span>
+        </Typography>
       );
     }
-    return <img src={src} alt={alt} {...props} />;
+    return <img src={src} alt={alt} {...props} style={{ maxWidth: '100%', height: 'auto' }} />;
 };
 
 
@@ -144,10 +144,7 @@ const DocumentEditor = ({ documentId, initialContent }: DocumentEditorProps) => 
                             backgroundColor: 'action.hover',
                         }}
                     >
-                        <Toolbar 
-                            insertMarkdown={insertMarkdown} 
-                            className="px-3 py-2" 
-                        />
+                        <Toolbar insertMarkdown={insertMarkdown} />
                     </Box>
                     
                     <Box
@@ -158,26 +155,30 @@ const DocumentEditor = ({ documentId, initialContent }: DocumentEditorProps) => 
                             display: 'flex',
                         }}
                     >
-                        <textarea
+                        <Box
+                            component="textarea"
                             ref={textareaRef}
                             value={markdownInput}
                             onChange={handleChange}
                             placeholder="Comece a escrever em Markdown..."
-                            style={{
+                            sx={{
                                 width: '100%',
                                 height: '100%',
-                                padding: '16px',
+                                p: 2,
                                 resize: 'none',
                                 overflowY: 'auto',
                                 fontFamily: 'monospace',
                                 fontSize: '0.875rem',
                                 lineHeight: 1.6,
                                 backgroundColor: 'transparent',
-                                color: theme.palette.text.primary,
+                                color: 'text.primary',
                                 border: 'none',
                                 outline: 'none',
+                                '&::placeholder': {
+                                    color: 'text.secondary',
+                                    opacity: 0.6,
+                                },
                             }}
-                            className="placeholder:text-gray-500"
                         />
                     </Box>
                 </Box>

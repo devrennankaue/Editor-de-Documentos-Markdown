@@ -21,7 +21,7 @@ const DocumentsContext = createContext<IDocumentsContext | undefined>(undefined)
 // Valor inicial para um novo documento
 const DEFAULT_DOCUMENT: Omit<IDocument, 'id'> = {
   title: "Documento Sem Título",
-  content: "",
+  content: "",  
   updatedAt: new Date().toISOString(),
 };
 

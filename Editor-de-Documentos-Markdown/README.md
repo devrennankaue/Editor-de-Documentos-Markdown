@@ -223,7 +223,7 @@ Este projeto foi desenvolvido como parte do processo seletivo do Projeto ADA.
 
 ## 👨‍💻 Autor
 
-Desenvolvido para o desafio do processo seletivo ADA - Assembly Digital Assistant.
+Rennan Kauê de Oliveira Silva
 
 ---
 
