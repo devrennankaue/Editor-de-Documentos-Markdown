@@ -221,10 +221,6 @@ O projeto utiliza **Material UI (MUI)** para gerenciamento de tema, oferecendo s
 
 Este projeto foi desenvolvido como parte do processo seletivo do Projeto ADA.
 
-## 👨‍💻 Autor
-
-Desenvolvido para o desafio do processo seletivo ADA - Assembly Digital Assistant.
-
 ---
 
 **Desenvolvido usando Next.js, TypeScript e Material UI**
