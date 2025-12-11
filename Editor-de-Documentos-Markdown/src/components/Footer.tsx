@@ -1,7 +1,7 @@
 // src/components/Footer.tsx
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Box,
     Container,
@@ -12,12 +12,16 @@ import {
     Stack,
     Tooltip,
     useTheme,
+    Collapse,
+    Fab,
 } from '@mui/material';
 import {
     Github,
     Linkedin,
     MapPin,
     User,
+    ChevronUp,
+    Info,
 } from 'lucide-react';
 
 interface ContactInfo {
@@ -40,18 +44,41 @@ const Footer: React.FC<FooterProps> = ({
     }
 }) => {
     const theme = useTheme();
+    const [isOpen, setIsOpen] = useState(false);
+
+    const toggleFooter = () => {
+        setIsOpen(!isOpen);
+    };
 
     return (
-        <Box
-            component="footer"
-            sx={{
-                mt: 'auto',
-                backgroundColor: 'background.paper',
-                borderTop: 1,
-                borderColor: 'divider',
-                py: 3,
-            }}
-        >
+        <>
+            {/* Botão Flutuante para Mostrar/Esconder Footer */}
+            <Fab
+                color="primary"
+                aria-label="mostrar informações"
+                onClick={toggleFooter}
+                sx={{
+                    position: 'fixed',
+                    bottom: 16,
+                    right: 16,
+                    zIndex: 1000,
+                }}
+            >
+                {isOpen ? <ChevronUp size={24} /> : <Info size={24} />}
+            </Fab>
+
+            {/* Footer com Collapse */}
+            <Collapse in={isOpen}>
+                <Box
+                    component="footer"
+                    sx={{
+                        mt: 'auto',
+                        backgroundColor: 'background.paper',
+                        borderTop: 1,
+                        borderColor: 'divider',
+                        py: 3,
+                    }}
+                >
             <Container maxWidth="lg">
                 <Stack
                     direction={{ xs: 'column', sm: 'row' }}
@@ -187,6 +214,8 @@ const Footer: React.FC<FooterProps> = ({
                 </Box>
             </Container>
         </Box>
+            </Collapse>
+        </>
     );
 };
 
